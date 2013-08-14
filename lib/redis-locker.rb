@@ -4,13 +4,14 @@ require 'timeout'
 
 
 class RedisLocker
-  attr_reader :key, :timestamp, :timestamp_key, :time_limit
+  attr_reader :key, :timestamp, :timestamp_key, :time_limit, :running
 
   # @param [String] key
   # @param [Integer] time_limit Number of seconds when locker will be expired
-  def initialize(key, time_limit = 5.seconds)
+  def initialize(key, time_limit = 5)
     @key = key
     @time_limit = time_limit
+    @running = false
   end
 
   # Waits for the queue and evaluates the block
@@ -34,7 +35,17 @@ class RedisLocker
     raise error
   end
 
+  # @return [true, false]
+  def current?
+    concurrent_timestamp == timestamp
+  end
+
+  # Puts running block information in Redis
+  # This information will be used to place running block in a specific position of its queue
   def enter_queue
+    raise 'This block is already in the queue' if running?
+
+    @running = true
     self.timestamp = generate_timestamp.to_s
 
     redis.set    timestamp_key, '1'
@@ -42,9 +53,11 @@ class RedisLocker
     redis.rpush  key, timestamp
   end
 
+  # Clears all data from queue related to this block
   def exit_queue
     redis.del timestamp_key
     redis.lrem key, 1, timestamp
+    @running = false
   end
 
   # Returns true if block is ready to run
@@ -54,20 +67,24 @@ class RedisLocker
       concurrent_timestamp.nil? ? start_queue : make_current
       true
     else
-      concurrent_timestamp == timestamp
+      current?
     end
   end
 
   # @param [String] concurrent_timestamp
   # @return [true, false]
   def ready?
-    concurrent_timestamp.nil? ||
+    concurrent_timestamp.nil? || current? ||
         (generate_timestamp - concurrent_timestamp.to_f >= time_limit) ||
-              redis.get(generate_timestamp_key(concurrent_timestamp)).nil?
+          redis.get(generate_timestamp_key(concurrent_timestamp)).nil?
   end
 
   def redis
     self.class.redis
+  end
+
+  def running?
+    @running
   end
 
   def self.redis

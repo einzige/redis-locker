@@ -1,6 +1,7 @@
 # redis-locker
 
-A locking mechanism. Builds queue of concurrent code blocks using Redis.
+A super-FAST and super-ROBUST LOCKING mechanism. Builds queue of concurrent code blocks using Redis.
+If Redis fails at some point (cleared, filled with wrong data, stuck) it will be trying to stay alive anyway. This is supported by additional control-keys.
 
 ## Installing
 ```
