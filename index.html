@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Redis Locker by einzige</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/einzige/redis-locker">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/einzige/redis-locker/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/einzige/redis-locker/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Redis Locker</h1>
+          <p>Destroys the concurrency of your ruby code using Redis.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/einzige">einzige</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>
+<a name="redis-locker" class="anchor" href="#redis-locker"><span class="octicon octicon-link"></span></a>redis-locker</h1>
+
+<p>A super-FAST and super-ROBUST LOCKING mechanism.
+Builds queue of concurrent code blocks using Redis.</p>
+
+<p>If Redis fails at some point (cleared, filled with wrong data, stuck) it will be trying to stay alive anyway. This is supported by additional key-control.</p>
+
+<h2>
+<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h2>
+
+<pre><code>$ gem install redis-locker
+</code></pre>
+
+<p>Or put in your gemfile for latest version:</p>
+
+<div class="highlight"><pre><span class="n">gem</span> <span class="s1">'redis-locker'</span><span class="p">,</span> <span class="ss">git</span><span class="p">:</span> <span class="s1">'git://github.com/einzige/redis-locker.git'</span>
+</pre></div>
+
+<h2>
+<a name="using" class="anchor" href="#using"><span class="octicon octicon-link"></span></a>Using</h2>
+
+<div class="highlight"><pre><span class="c1"># Throws an error if transaction will not be finished in 10 seconds</span>
+<span class="no">RedisLocker</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'payment_transaction'</span><span class="p">)</span><span class="o">.</span><span class="n">run!</span><span class="p">(</span><span class="mi">10</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span> <span class="k">do</span>
+  <span class="c1"># Any concurrent code.</span>
+<span class="k">end</span>
+
+<span class="c1"># Throws an error if transaction will not be finished in 10 seconds</span>
+<span class="c1"># Clears all stale tasks which were not performed within 10 seconds</span>
+<span class="no">RedisLocker</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'payment_transaction'</span><span class="p">,</span> <span class="mi">10</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span><span class="o">.</span><span class="n">run!</span> <span class="k">do</span>
+  <span class="c1"># Any concurrent code.</span>
+<span class="k">end</span>
+
+<span class="c1"># Does not throw any error, but clears all stale tasks which were not performed within 10 seconds</span>
+<span class="no">RedisLocker</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">'payment_transaction'</span><span class="p">,</span> <span class="mi">10</span><span class="o">.</span><span class="n">seconds</span><span class="p">)</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span>
+  <span class="c1"># Any concurrent code.</span>
+<span class="k">end</span>
+</pre></div>
+
+<h2>
+<a name="running-specs" class="anchor" href="#running-specs"><span class="octicon octicon-link"></span></a>Running specs</h2>
+
+<ul>
+<li>Clone the repo</li>
+<li>run <code>bundle exec rake spec</code>
+</li>
+</ul><h2>
+<a name="contributing-to-redis-locker" class="anchor" href="#contributing-to-redis-locker"><span class="octicon octicon-link"></span></a>Contributing to redis-locker</h2>
+
+<ul>
+<li>Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet</li>
+<li>Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it</li>
+<li>Fork the project</li>
+<li>Start a feature/bugfix branch</li>
+<li>Commit and push until you are happy with your contribution</li>
+<li>Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.</li>
+<li>Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.</li>
+</ul><h2>
+<a name="copyright" class="anchor" href="#copyright"><span class="octicon octicon-link"></span></a>Copyright</h2>
+
+<p>Copyright (c) 2013 Sergei Zinin. No LICENSE for details :)</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
