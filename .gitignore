@@ -3,3 +3,4 @@ Gemfile.lock
 coverage
 .bundle
 pkg
+spec/config/redis.yml

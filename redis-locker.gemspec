@@ -18,12 +18,10 @@ Gem::Specification.new do |s|
   s.summary = %q{Destroys the concurrency of your code.}
 
   if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0')
-    s.add_runtime_dependency(%q<activesupport>, [">= 3.2.10"])
     s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_runtime_dependency(%q<logger>, [">= 1.2.8"])
     s.add_runtime_dependency(%q<redis>, [">= 3.0.3"])
   else
-    s.add_dependency(%q<activesupport>, [">= 3.2.10"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<logger>, [">= 1.2.8"])
     s.add_dependency(%q<redis>, [">= 3.0.3"])
