@@ -2,7 +2,7 @@
 
 A super-FAST and super-ROBUST LOCKING mechanism. Resolves race conditions.
 Builds queue of concurrent code blocks using Redis.
-Performs as less number of redis requests as it is possible.
+Minimizes the number of redis requests to the least possible amount.
 
 If Redis fails at some point (cleared, filled with wrong data, stuck) it will be trying to stay alive anyway. This is supported by additional key-control.
 
